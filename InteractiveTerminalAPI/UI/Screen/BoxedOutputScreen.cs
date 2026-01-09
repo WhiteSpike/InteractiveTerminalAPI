@@ -1,4 +1,5 @@
-﻿using InteractiveTerminalAPI.Misc.Util;
+﻿using InteractiveTerminalAPI.Extensions;
+using InteractiveTerminalAPI.Misc.Util;
 using InteractiveTerminalAPI.Util;
 using System;
 using System.Text;
@@ -46,11 +47,11 @@ namespace InteractiveTerminalAPI.UI.Screen
                 sb.Append(Tools.WrapText(elements[i].GetText(availableLength - 4), availableLength, leftPadding: "│ ", rightPadding: " │"));
             }
             string outputString = GetOutput().ToString();
-            int rightPos = availableLength - outputString.Length - 6;
+            int rightPos = availableLength - outputString.NonHTMLLength() - 6;
             sb.Append(APIConstants.VERTICAL_LINE)
                 .Append(new string(APIConstants.WHITE_SPACE, rightPos - 3))
                 .Append(APIConstants.TOP_LEFT_TITLE_CORNER);
-                sb.Append(new string(APIConstants.HORIZONTAL_TITLE_LINE, outputString.Length + 2))
+                sb.Append(new string(APIConstants.HORIZONTAL_TITLE_LINE, outputString.NonHTMLLength() + 2))
                 .Append(APIConstants.TOP_RIGHT_TITLE_CORNER)
                 .Append(new string(APIConstants.WHITE_SPACE, 3))
                 .Append(APIConstants.VERTICAL_LINE)
@@ -67,7 +68,7 @@ namespace InteractiveTerminalAPI.UI.Screen
                 .Append('\n');
             sb.Append(new string(APIConstants.WHITE_SPACE, rightPos - 2))
                 .Append(APIConstants.BOTTOM_LEFT_TITLE_CORNER)
-                .Append(new string(APIConstants.HORIZONTAL_TITLE_LINE, outputString.Length + 2))
+                .Append(new string(APIConstants.HORIZONTAL_TITLE_LINE, outputString.NonHTMLLength() + 2))
                 .Append(APIConstants.BOTTOM_RIGHT_TITLE_CORNER)
                 .Append('\n');
 

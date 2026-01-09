@@ -61,6 +61,8 @@ namespace InteractiveTerminalAPI.Util
         {
             TerminalNode result = retrievedTerminalNodes.GetValueOrDefault(word, null);
             if (result != null) return result;
+            TerminalKeyword terminalKeyword = FindTerminalKeyword(word);
+            if (terminalKeyword == null) return null;
             result = FindTerminalKeyword(word).specialKeywordResult;
             if (!retrievedTerminalNodes.ContainsKey(word)) retrievedTerminalNodes[word] = result;
             return result;

@@ -32,7 +32,7 @@ namespace InteractiveTerminalAPI.UI.Cursor
             if (!Active(this)) sb.Append(APIConstants.COLOR_FINAL_FORMAT);
             return sb.ToString();
         }
-        public static new CursorCounterElement Create(string name = "", string description = "", Action action = default, int counter = 0, Func<CursorElement, bool> active = null, bool selectInactive = true, bool showCounter = true)
+        public static CursorCounterElement Create(string name = "", string description = "", Action action = default, int counter = 0, Func<CursorElement, bool> active = null, bool selectInactive = true, bool showCounter = true)
         {
             return new CursorCounterElement()
             {
