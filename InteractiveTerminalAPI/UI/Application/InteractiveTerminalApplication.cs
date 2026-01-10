@@ -5,16 +5,16 @@ using System;
 
 namespace InteractiveTerminalAPI.UI.Application
 {
-    public abstract class InteractiveTerminalApplication : BaseInteractiveApplication<CursorMenu, CursorElement>
+    public abstract class InteractiveTerminalApplication<T> : BaseInteractiveApplication<T> where T : CursorElement
     {
         protected void Confirm(string title, string description, Action confirmAction, Action declineAction, string additionalMessage = "")
         {
-            CursorElement[] cursorElements =
+            T[] cursorElements =
                 [
-                    CursorElement.Create(name: APIConstants.CONFIRM_PROMPT, action: confirmAction),
-                    CursorElement.Create(name: APIConstants.CANCEL_PROMPT, action: declineAction),
+                    (T)CursorElement.Create(name: APIConstants.CONFIRM_PROMPT, action: confirmAction),
+                    (T)CursorElement.Create(name: APIConstants.CANCEL_PROMPT, action: declineAction),
                 ];
-            CursorMenu cursorMenu = CursorMenu.Create(elements: cursorElements);
+            CursorMenu<T> cursorMenu = CursorMenu<T>.Create(elements: cursorElements);
 
             ITextElement[] elements =
                 [
@@ -29,8 +29,8 @@ namespace InteractiveTerminalAPI.UI.Application
         }
         protected void ErrorMessage(string title, Action backAction, string error)
         {
-            CursorElement[] cursorElements = [CursorElement.Create(name: APIConstants.GO_BACK_PROMPT, action: backAction)];
-            CursorMenu cursorMenu = CursorMenu.Create(startingCursorIndex: 0, elements: cursorElements);
+            T[] cursorElements = [(T)CursorElement.Create(name: APIConstants.GO_BACK_PROMPT, action: backAction)];
+            CursorMenu<T> cursorMenu = CursorMenu<T>.Create(startingCursorIndex: 0, elements: cursorElements);
             ITextElement[] elements =
                 [
                     TextElement.Create(text: error),
@@ -42,11 +42,11 @@ namespace InteractiveTerminalAPI.UI.Application
         }
         protected void ErrorMessage(string title, string description, Action backAction, string error)
         {
-            CursorElement[] cursorElements =
+            T[] cursorElements =
                 [
-                    CursorElement.Create(name: APIConstants.GO_BACK_PROMPT, action: backAction)
+                    (T)CursorElement.Create(name: APIConstants.GO_BACK_PROMPT, action: backAction)
                 ];
-            CursorMenu cursorMenu = CursorMenu.Create(startingCursorIndex: 0, elements: cursorElements);
+			CursorMenu<T> cursorMenu = CursorMenu<T>.Create(startingCursorIndex: 0, elements: cursorElements);
             ITextElement[] elements =
                 [
                     TextElement.Create(text: description),

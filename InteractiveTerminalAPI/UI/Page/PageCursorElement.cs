@@ -6,10 +6,10 @@ using System.Linq;
 
 namespace InteractiveTerminalAPI.UI.Page
 {
-    public class PageCursorElement : PageElement
+    public class PageCursorElement<T> : PageElement where T : CursorElement
     {
-        public CursorMenu[] cursorMenus;
-        public CursorMenu GetCurrentCursorMenu()
+        public BaseCursorMenu<T>[] cursorMenus;
+        public BaseCursorMenu<T> GetCurrentCursorMenu()
         {
             return cursorMenus[pageIndex];
         }
@@ -17,9 +17,9 @@ namespace InteractiveTerminalAPI.UI.Page
         public void ChangeSorting()
         {
             cursorMenus.Do((x) => x.ChangeSorting());
-            CursorElement[] allElements = cursorMenus.SelectMany(menu => menu.elements).ToArray();
+            T[] allElements = cursorMenus.SelectMany(menu => menu.elements).ToArray();
 
-            Func<CursorElement, CursorElement, int> sortFunction = cursorMenus[0].GetCurrentSorting();
+            Func<T, T, int> sortFunction = cursorMenus[0].GetCurrentSorting();
 
             Array.Sort(allElements, (x,y) => sortFunction(x,y));
 
@@ -34,9 +34,9 @@ namespace InteractiveTerminalAPI.UI.Page
                 currentIndex += length;
             }
         }
-        public static PageCursorElement Create(int startingPageIndex = 0, IScreen[] elements = default, CursorMenu[] cursorMenus = default)
+        public static PageCursorElement<T> Create(int startingPageIndex = 0, IScreen[] elements = default, BaseCursorMenu<T>[] cursorMenus = default)
         {
-            return new PageCursorElement()
+            return new PageCursorElement<T>()
             {
                 pageIndex = startingPageIndex,
                 elements = elements,

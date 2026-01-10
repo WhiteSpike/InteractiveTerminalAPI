@@ -10,9 +10,13 @@ namespace InteractiveTerminalAPI.UI.Cursor
         public T[] elements;
         public Func<T,T, int>[] SortingFunctions { get; set; }
 
+        public T GetSelectedElement()
+        {
+            return elements[cursorIndex];
+        }
         public void Execute()
         {
-            elements[cursorIndex].ExecuteAction();
+			GetSelectedElement().ExecuteAction();
         }
         public Func<T, T, int> GetCurrentSorting()
         {
@@ -46,7 +50,8 @@ namespace InteractiveTerminalAPI.UI.Cursor
 
         public bool IsCurrentElementSelectable()
         {
-            return elements[cursorIndex] != null && (elements[cursorIndex].Active(elements[cursorIndex]) || elements[cursorIndex].SelectInactive);
+            T selectedElement = GetSelectedElement();
+			return selectedElement != null && (selectedElement.Active(selectedElement) || selectedElement.SelectInactive);
         }
 
         public void ResetCursor()

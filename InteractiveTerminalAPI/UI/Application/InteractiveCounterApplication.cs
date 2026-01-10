@@ -4,7 +4,7 @@ using static UnityEngine.InputSystem.InputAction;
 
 namespace InteractiveTerminalAPI.UI.Application
 {
-    public abstract class InteractiveCounterApplication<K,V> : BaseInteractiveApplication<K,V> where K : BaseCursorCounterMenu<V> where V : CursorCounterElement
+    public abstract class InteractiveCounterApplication<T> : BaseInteractiveApplication<T> where T : CursorCounterElement
     {
         protected override void AddInputBindings()
         {
@@ -21,12 +21,12 @@ namespace InteractiveTerminalAPI.UI.Application
         void IncrementSelectedCounter()
         {
             RoundManager.PlayRandomClip(terminal.terminalAudio, terminal.keyboardClips);
-            currentCursorMenu.IncrementCounter();
+            currentCursorMenu.GetSelectedElement().IncrementCounter();
         }
         void DecrementSelectedCounter()
         {
             RoundManager.PlayRandomClip(terminal.terminalAudio, terminal.keyboardClips);
-            currentCursorMenu.DecrementCounter();
+            currentCursorMenu.GetSelectedElement().DecrementCounter();
         }
         internal void OnApplicationCountUp(CallbackContext context)
         {

@@ -9,16 +9,16 @@ using static UnityEngine.InputSystem.InputAction;
 
 namespace InteractiveTerminalAPI.UI.Application
 {
-    public abstract class PageApplication : InteractiveTerminalApplication
-    {
-        protected PageCursorElement initialPage;
-        protected PageCursorElement previousPage;
-        protected PageCursorElement currentPage;
+    public abstract class PageApplication<T> : InteractiveTerminalApplication<T> where T : CursorElement
+	{
+        protected PageCursorElement<T> initialPage;
+        protected PageCursorElement<T> previousPage;
+        protected PageCursorElement<T> currentPage;
         protected override string GetApplicationText()
         {
             return currentScreen == currentPage.GetCurrentScreen() ? currentPage.GetText(APIConstants.AVAILABLE_CHARACTERS_PER_LINE) : currentScreen.GetText(APIConstants.AVAILABLE_CHARACTERS_PER_LINE);
         }
-        protected virtual int GetEntriesPerPage<T>(T[] entries)
+        protected virtual int GetEntriesPerPage<K>(K[] entries)
         {
             return Mathf.CeilToInt(entries.Length / 2f);
         }
@@ -32,7 +32,7 @@ namespace InteractiveTerminalAPI.UI.Application
             };
         }
 
-        protected virtual int GetAmountPages<T>(T[] entries)
+        protected virtual int GetAmountPages<K>(K[] entries)
         {
             return Mathf.CeilToInt(entries.Length / (float)GetEntriesPerPage(entries));
         }
@@ -65,13 +65,13 @@ namespace InteractiveTerminalAPI.UI.Application
         {
             SwitchScreen(initialPage, true);
         }
-        protected void SwitchScreen(PageCursorElement pages, bool previous)
+        protected void SwitchScreen(PageCursorElement<T> pages, bool previous)
         {
             previousPage = currentPage;
             currentPage = pages;
             SwitchScreen(currentPage.GetCurrentScreen(), currentPage.GetCurrentCursorMenu(), previous);
         }
-        protected override void SwitchScreen(IScreen screen, CursorMenu cursorMenu, bool previous)
+        protected override void SwitchScreen(IScreen screen, BaseCursorMenu<T> cursorMenu, bool previous)
         {
             base.SwitchScreen(screen, cursorMenu, previous);
             if (screen == currentPage.GetCurrentScreen())
@@ -110,31 +110,31 @@ namespace InteractiveTerminalAPI.UI.Application
             Keybinds.pageDownAction.performed -= OnApplicationPageDown;
         }
 
-        protected (T[][], CursorMenu[], IScreen[]) GetPageEntries<T>(T[] entries)
+        protected (K[][], BaseCursorMenu<T>[], IScreen[]) GetPageEntries<K>(K[] entries)
         {
             int amountPages = GetAmountPages(entries);
             int lengthPerPage = GetEntriesPerPage(entries);
 
-            T[][] pages = new T[amountPages][];
+            K[][] pages = new K[amountPages][];
             for (int i = 0; i < amountPages; i++)
-                pages[i] = new T[lengthPerPage];
+                pages[i] = new K[lengthPerPage];
             for (int i = 0; i < entries.Length; i++)
             {
                 int row = i / lengthPerPage;
                 int col = i % lengthPerPage;
                 pages[row][col] = entries[i];
             }
-            CursorMenu[] cursorMenus = new CursorMenu[pages.Length];
+			BaseCursorMenu<T>[] cursorMenus = new BaseCursorMenu<T>[pages.Length];
             IScreen[] screens = new IScreen[pages.Length];
-            initialPage = PageCursorElement.Create(startingPageIndex: 0, cursorMenus: cursorMenus, elements: screens);
+            initialPage = PageCursorElement<T>.Create(startingPageIndex: 0, cursorMenus: cursorMenus, elements: screens);
 
             return (pages, cursorMenus, screens);
         }
-        internal void OnApplicationPageUp(CallbackContext context)
+        protected void OnApplicationPageUp(CallbackContext context)
         {
             ChangeScreenForward();
         }
-        internal void OnApplicationPageDown(CallbackContext context)
+        protected void OnApplicationPageDown(CallbackContext context)
         {
             ChangeScreenBackward();
         }

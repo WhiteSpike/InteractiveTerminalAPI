@@ -17,15 +17,15 @@ namespace InteractiveTerminalAPI.UI.Hierarchy
         public char VerticalSpacingCharacter { get; set; } = APIConstants.VERTICAL_SPACING;
         public int VerticalSpacing { get; set; } = APIConstants.VERTICAL_SPACING_AMOUNT;
         public string Title { get; set; }
-        public CursorMenu innerCursorMenu {  get; set; }
+        public BaseCursorMenu<CursorElement> innerCursorMenu {  get; set; }
         public bool Selected { get; set; }
 
-        CursorMenu previousCursorMenu;
+        BaseCursorMenu<CursorElement> previousCursorMenu;
         public override void ExecuteAction()
         {
             base.ExecuteAction();
             Selected = true;
-            if (InteractiveTerminalManager.Instance.mainApplication is InteractiveTerminalApplication application)
+            if (InteractiveTerminalManager.Instance.mainApplication is InteractiveTerminalApplication<CursorElement> application)
             {
                 Keybinds.cursorExitAction.performed -= InteractiveTerminalManager.Instance.mainApplication.OnScreenExit;
                 Keybinds.cursorExitAction.performed += OnHierarchyExit;
@@ -37,7 +37,7 @@ namespace InteractiveTerminalAPI.UI.Hierarchy
         {
             Keybinds.cursorExitAction.performed += InteractiveTerminalManager.Instance.mainApplication.OnScreenExit;
             Keybinds.cursorExitAction.performed -= OnHierarchyExit;
-            if (InteractiveTerminalManager.Instance.mainApplication is InteractiveTerminalApplication application)
+            if (InteractiveTerminalManager.Instance.mainApplication is InteractiveTerminalApplication<CursorElement> application)
             {
                 application.currentCursorMenu = previousCursorMenu;
                 previousCursorMenu = null;

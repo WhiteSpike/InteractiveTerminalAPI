@@ -7,10 +7,10 @@ using static UnityEngine.InputSystem.InputAction;
 
 namespace InteractiveTerminalAPI.UI.Application
 {
-    public abstract class BaseInteractiveApplication<K,V> : TerminalApplication where K : BaseCursorMenu<V> where V : CursorElement
+    public abstract class BaseInteractiveApplication<T> : TerminalApplication where T : CursorElement
     {
-        public K currentCursorMenu;
-        public K previousCursorMenu;
+        public BaseCursorMenu<T> currentCursorMenu;
+        public BaseCursorMenu<T> previousCursorMenu;
         public IScreen previousScreen;
         protected override string GetApplicationText()
         {
@@ -73,7 +73,7 @@ namespace InteractiveTerminalAPI.UI.Application
             RoundManager.PlayRandomClip(terminal.terminalAudio, terminal.keyboardClips);
             currentCursorMenu.Execute();
         }
-        protected virtual void SwitchScreen(IScreen screen, K cursorMenu, bool previous)
+        protected virtual void SwitchScreen(IScreen screen, BaseCursorMenu<T> cursorMenu, bool previous)
         {
             previousScreen = screen;
             previousCursorMenu = currentCursorMenu;

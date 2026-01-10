@@ -53,6 +53,9 @@ namespace InteractiveTerminalAPI.Input
         /// </summary>
         public static InputAction changeSortingAction;
 
+        public static InputAction pageUpCounterOnlyAction;
+        public static InputAction pageDownCounterOnlyAction;
+
         public static PlayerControllerB localPlayerController => StartOfRound.Instance?.localPlayerController;
 
         /// <summary>
@@ -71,6 +74,8 @@ namespace InteractiveTerminalAPI.Input
             pageDownAction = InputUtils_Compat.PageDownKey;
             storeConfirmAction = InputUtils_Compat.LguStoreConfirmKey;
             changeSortingAction = InputUtils_Compat.ChangeApplicationSortingKey;
+            pageUpCounterOnlyAction = InputUtils_Compat.PageUpCounterOnlyKey;
+            pageDownCounterOnlyAction = InputUtils_Compat.PageDownCounterOnlyKey;
         }
     }
 }

@@ -44,6 +44,12 @@ namespace InteractiveTerminalAPI.Misc.Util
         internal const string CHANGE_SORTING_KEYBIND_NAME = "Change sorting in the current application";
         internal const string CHANGE_SORTING_DEFAULT_KEYBIND = "<Keyboard>/f";
 
+        internal const string NEXT_PAGE_COUNTER_ONLY_KEYBIND_NAME = "Next Page in the current application (only applied for applications with counters)";
+        internal const string NEXT_PAGE_COUNTER_ONLY_KEYBIND = "<Keyboard>/e";
+
+        internal const string PREVIOUS_PAGE_COUNTER_ONLY_KEYBIND_NAME = "Previous Page in the current Application (only applied for applications with counters)";
+        internal const string PREVIOUS_PAGE_COUNTER_ONLY_KEYBIND = "<Keyboard>/q";
+
         #endregion
 
         #region LGU Store Interactive UI

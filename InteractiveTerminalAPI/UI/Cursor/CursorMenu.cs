@@ -6,7 +6,7 @@ using InteractiveTerminalAPI.Util;
 
 namespace InteractiveTerminalAPI.UI.Cursor
 {
-    public class CursorMenu : BaseCursorMenu<CursorElement>
+    public class CursorMenu<T> : BaseCursorMenu<T> where T : CursorElement
     {
         public override string GetText(int availableLength)
         {
@@ -29,14 +29,14 @@ namespace InteractiveTerminalAPI.UI.Cursor
             return sb.ToString();
         }
 
-        public static CursorMenu Create(int startingCursorIndex = 0, char cursorCharacter = '>', CursorElement[] elements = default, Func<CursorElement, CursorElement, int>[] sorting = null)
+        public static CursorMenu<T> Create(int startingCursorIndex = 0, char cursorCharacter = '>', T[] elements = default, Func<T, T, int>[] sorting = null)
         {
             if (sorting == null)
             {
-                sorting = new Func<CursorElement, CursorElement, int>[1];
+                sorting = new Func<T, T, int>[1];
                 sorting[0] = (element1, element2) => string.Compare(element2.Name, element1.Name);
             }
-            return new CursorMenu()
+            return new CursorMenu<T>()
             {
                 cursorIndex = startingCursorIndex,
                 cursorCharacter = cursorCharacter,
