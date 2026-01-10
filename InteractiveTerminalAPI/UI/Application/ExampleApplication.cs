@@ -9,7 +9,7 @@ using System.Text;
 
 namespace InteractiveTerminalAPI.UI.Application
 {
-    internal class ExampleApplication : InteractiveTerminalApplication
+    internal class ExampleApplication : InteractiveTerminalApplication<CursorElement>
     {
         public override void Initialization()
         {
@@ -23,7 +23,7 @@ namespace InteractiveTerminalAPI.UI.Application
                      Name = "Me too!"
                   },
                 ];
-            CursorMenu hieCursorMenu = new CursorMenu()
+            CursorMenu<CursorElement> hieCursorMenu = new CursorMenu<CursorElement>()
             {
                 cursorIndex = 0, // Whatever prompt we want the cursor to be selecting when the screen appears, since we only have one, it will use that one
                 elements = hieElements // The collection of cursor elements we wish to have in this menu
@@ -35,7 +35,7 @@ namespace InteractiveTerminalAPI.UI.Application
                       Title = "Hello",
                       innerCursorMenu = hieCursorMenu
                   };
-            CursorMenu cursorMenu = new CursorMenu()
+            CursorMenu<CursorElement> cursorMenu = new CursorMenu<CursorElement>()
             {
                 cursorIndex = 0, // Whatever prompt we want the cursor to be selecting when the screen appears, since we only have one, it will use that one
                 elements = elements // The collection of cursor elements we wish to have in this menu
