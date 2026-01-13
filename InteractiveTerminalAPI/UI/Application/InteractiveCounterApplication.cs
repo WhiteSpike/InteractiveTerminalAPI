@@ -21,11 +21,15 @@ namespace InteractiveTerminalAPI.UI.Application
         void IncrementSelectedCounter()
         {
             RoundManager.PlayRandomClip(terminal.terminalAudio, terminal.keyboardClips);
-            currentCursorMenu.GetSelectedElement().IncrementCounter();
+			T selectedElement = currentCursorMenu.GetSelectedElement();
+			if (selectedElement is not CursorCounterElement) return;
+			currentCursorMenu.GetSelectedElement().IncrementCounter();
         }
         void DecrementSelectedCounter()
         {
             RoundManager.PlayRandomClip(terminal.terminalAudio, terminal.keyboardClips);
+            T selectedElement = currentCursorMenu.GetSelectedElement();
+            if (selectedElement is not CursorCounterElement) return;
             currentCursorMenu.GetSelectedElement().DecrementCounter();
         }
         internal void OnApplicationCountUp(CallbackContext context)
