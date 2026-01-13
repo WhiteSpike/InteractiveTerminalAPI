@@ -10,6 +10,7 @@ namespace InteractiveTerminalAPI.UI.Cursor
 
         public T ApplyFunction()
         {
+            if (Func == null) return default;
             return Func(Counter);
         }
         public override string GetText(int availableLength)
