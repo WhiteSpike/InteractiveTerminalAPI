@@ -49,7 +49,8 @@ namespace InteractiveTerminalAPI.UI
             }
 
             mainApplication.Initialization();
-            mainApplication.UpdateInputBindings(enable: true);
+            mainApplication.SetDefaultKeyboardAudio();
+			mainApplication.UpdateInputBindings(enable: true);
         }
         void Update()
         {
@@ -62,9 +63,6 @@ namespace InteractiveTerminalAPI.UI
         {
             mainApplication.UpdateInputBindings(enable: false);
             terminalReference.LoadNewNode(lastTerminalNode);
-            terminalReference.screenText.interactable = true;
-            terminalReference.screenText.ActivateInputField();
-            terminalReference.screenText.Select();
             UpdateInput(true);
             Instance = null;
         }

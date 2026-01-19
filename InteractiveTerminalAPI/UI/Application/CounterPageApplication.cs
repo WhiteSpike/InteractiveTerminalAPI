@@ -26,11 +26,6 @@ namespace InteractiveTerminalAPI.UI.Application
 			Keybinds.pageUpCounterOnlyAction.performed -= OnApplicationPageUp;
 			Keybinds.pageDownCounterOnlyAction.performed -= OnApplicationPageDown;
 		}
-		void IncrementSelectedCounter()
-		{
-			RoundManager.PlayRandomClip(terminal.terminalAudio, terminal.keyboardClips);
-			currentCursorMenu.GetSelectedElement().IncrementCounter();
-		}
 		protected override void SwitchScreen(IScreen screen, BaseCursorMenu<T> cursorMenu, bool previous)
 		{
 			base.SwitchScreen(screen, cursorMenu, previous);
@@ -47,9 +42,14 @@ namespace InteractiveTerminalAPI.UI.Application
 				Keybinds.pageDownCounterOnlyAction.performed -= OnApplicationPageDown;
 			}
 		}
+		void IncrementSelectedCounter()
+		{
+			PlayKeyboardSounds();
+			currentCursorMenu.GetSelectedElement().IncrementCounter();
+		}
 		void DecrementSelectedCounter()
 		{
-			RoundManager.PlayRandomClip(terminal.terminalAudio, terminal.keyboardClips);
+			PlayKeyboardSounds();
 			currentCursorMenu.GetSelectedElement().DecrementCounter();
 		}
 		internal void OnApplicationCountUp(CallbackContext context)

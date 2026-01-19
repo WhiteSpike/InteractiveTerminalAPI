@@ -38,7 +38,7 @@ namespace InteractiveTerminalAPI.UI.Application
         }
         protected override void ChangeSorting()
         {
-            RoundManager.PlayRandomClip(terminal.terminalAudio, terminal.keyboardClips);
+            PlayKeyboardSounds();
             currentPage.ChangeSorting();
         }
         public override void MoveCursorUp()
@@ -58,7 +58,7 @@ namespace InteractiveTerminalAPI.UI.Application
             if (currentPage.GetCurrentCursorMenu() == currentCursorMenu && currentCursorMenu.cursorIndex < cursorIndex)
             {
                 ChangeScreenForward();
-                currentCursorMenu.cursorIndex = 0;
+                base.MoveCursorDown();
             }
         }
         protected void ResetScreen()
@@ -86,15 +86,15 @@ namespace InteractiveTerminalAPI.UI.Application
             }
         }
         public void ChangeScreenForward()
-        {
-            RoundManager.PlayRandomClip(terminal.terminalAudio, terminal.keyboardClips);
-            currentPage.PageUp();
+		{
+			PlayKeyboardSounds();
+			currentPage.PageUp();
             SwitchScreen(currentPage.GetCurrentScreen(), currentPage.GetCurrentCursorMenu(), false);
         }
         public void ChangeScreenBackward()
-        {
-            RoundManager.PlayRandomClip(terminal.terminalAudio, terminal.keyboardClips);
-            currentPage.PageDown();
+		{
+			PlayKeyboardSounds();
+			currentPage.PageDown();
             SwitchScreen(currentPage.GetCurrentScreen(), currentPage.GetCurrentCursorMenu(), false);
         }
         protected override void AddInputBindings()

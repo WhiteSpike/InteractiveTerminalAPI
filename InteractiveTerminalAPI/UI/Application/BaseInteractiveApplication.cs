@@ -3,6 +3,8 @@ using InteractiveTerminalAPI.Misc.Util;
 using InteractiveTerminalAPI.UI.Cursor;
 using InteractiveTerminalAPI.UI.Screen;
 using System;
+using System.Collections;
+using UnityEngine;
 using static UnityEngine.InputSystem.InputAction;
 
 namespace InteractiveTerminalAPI.UI.Application
@@ -12,6 +14,8 @@ namespace InteractiveTerminalAPI.UI.Application
         public BaseCursorMenu<T> currentCursorMenu;
         public BaseCursorMenu<T> previousCursorMenu;
         public IScreen previousScreen;
+        Coroutine scrollingRoutine;
+        protected float scrollRate = 0.1f;
         protected override string GetApplicationText()
         {
             return currentScreen.GetText(APIConstants.AVAILABLE_CHARACTERS_PER_LINE);
@@ -24,66 +28,83 @@ namespace InteractiveTerminalAPI.UI.Application
         protected override void AddInputBindings()
         {
             base.AddInputBindings();
-            Keybinds.changeSortingAction.performed += OnApplicationChangeSorting;
-            Keybinds.cursorUpAction.performed += OnApplicationCursorUp;
-            Keybinds.cursorDownAction.performed += OnApplicationCursorDown;
-            Keybinds.storeConfirmAction.performed += OnApplicationConfirm;
-        }
+            Keybinds.changeSortingAction.started += OnApplicationChangeSorting;
+            Keybinds.cursorUpAction.started += OnApplicationCursorUp;
+            Keybinds.cursorDownAction.started += OnApplicationCursorDown;
+            Keybinds.storeConfirmAction.started += OnApplicationConfirm;
+            Keybinds.cursorUpAction.canceled += OnApplicationCursorScrollCancel;
+			Keybinds.cursorDownAction.canceled += OnApplicationCursorScrollCancel;
+		}
         protected override void RemoveInputBindings()
         {
             base.RemoveInputBindings();
-            Keybinds.changeSortingAction.performed -= OnApplicationChangeSorting;
-            Keybinds.cursorUpAction.performed -= OnApplicationCursorUp;
-            Keybinds.cursorDownAction.performed -= OnApplicationCursorDown;
-            Keybinds.storeConfirmAction.performed -= OnApplicationConfirm;
-        }
+            Keybinds.changeSortingAction.started -= OnApplicationChangeSorting;
+            Keybinds.cursorUpAction.started -= OnApplicationCursorUp;
+            Keybinds.cursorDownAction.started -= OnApplicationCursorDown;
+            Keybinds.storeConfirmAction.started -= OnApplicationConfirm;
+			Keybinds.cursorUpAction.canceled -= OnApplicationCursorScrollCancel;
+			Keybinds.cursorDownAction.canceled -= OnApplicationCursorScrollCancel;
+		}
         internal void OnApplicationConfirm(CallbackContext context)
         {
             Submit();
         }
         internal void OnApplicationCursorUp(CallbackContext context)
         {
-            MoveCursorUp();
+            scrollingRoutine = InteractiveTerminalManager.Instance.StartCoroutine(RepeatScrolling(scrollUp: true));
         }
+        internal void OnApplicationCursorScrollCancel(CallbackContext context)
+		{
+			InteractiveTerminalManager.Instance.StopCoroutine(scrollingRoutine);
+		}
         internal void OnApplicationChangeSorting(CallbackContext context)
         {
             ChangeSorting();
         }
         internal void OnApplicationCursorDown(CallbackContext context)
         {
-            MoveCursorDown();
-        }
+			scrollingRoutine = InteractiveTerminalManager.Instance.StartCoroutine(RepeatScrolling(scrollUp: false));
+		}
         protected virtual void ChangeSorting()
         {
-            RoundManager.PlayRandomClip(terminal.terminalAudio, terminal.keyboardClips);
-            currentCursorMenu.ChangeSorting();
+            PlayKeyboardSounds();
+			currentCursorMenu.ChangeSorting();
         }
         public virtual void MoveCursorUp()
-        {
-            RoundManager.PlayRandomClip(terminal.terminalAudio, terminal.keyboardClips);
-            currentCursorMenu.Backward();
+		{
+			PlayKeyboardSounds();
+			currentCursorMenu.Backward();
         }
         public virtual void MoveCursorDown()
-        {
-            RoundManager.PlayRandomClip(terminal.terminalAudio, terminal.keyboardClips);
-            currentCursorMenu.Forward();
+		{
+			PlayKeyboardSounds();
+			currentCursorMenu.Forward();
         }
         public void Submit()
-        {
-            RoundManager.PlayRandomClip(terminal.terminalAudio, terminal.keyboardClips);
-            currentCursorMenu.Execute();
+		{
+			PlayKeyboardSounds();
+			currentCursorMenu.Execute();
         }
         protected virtual void SwitchScreen(IScreen screen, BaseCursorMenu<T> cursorMenu, bool previous)
         {
-            previousScreen = screen;
+            previousScreen = currentScreen;
             previousCursorMenu = currentCursorMenu;
             currentScreen = screen;
             currentCursorMenu = cursorMenu;
             if (!previous)
             {
-                cursorMenu.cursorIndex = 0;
-                if (!cursorMenu.IsCurrentElementSelectable())
-                    cursorMenu.Forward();
+                cursorMenu.ResetCursor();
+            }
+        }
+
+        private IEnumerator RepeatScrolling(bool scrollUp)
+        {
+            while (true)
+            {
+                if (scrollUp) MoveCursorUp();
+                else MoveCursorDown();
+                yield return new WaitForEndOfFrame();
+                yield return new WaitForSeconds(scrollRate);
             }
         }
     }

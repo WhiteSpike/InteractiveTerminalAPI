@@ -57,7 +57,9 @@ namespace InteractiveTerminalAPI.UI.Cursor
         public void ResetCursor()
         {
             cursorIndex = 0;
-        }
+			if (!IsCurrentElementSelectable())
+				Forward();
+		}
 
         public abstract string GetText(int availableLength);
     }

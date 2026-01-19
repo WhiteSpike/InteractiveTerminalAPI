@@ -18,7 +18,7 @@ namespace InteractiveTerminalAPI.UI.Cursor
                 if (i == cursorIndex) sb.Append(cursorCharacter).Append(APIConstants.WHITE_SPACE); else sb.Append(APIConstants.WHITE_SPACE).Append(APIConstants.WHITE_SPACE);
                 string text = element.GetText(availableLength - 2);
                 string title = !string.IsNullOrEmpty(element.Name) ? text.Split('\n')[0] : text;
-                string description = !string.IsNullOrEmpty(element.Description) ? text.Substring(element.Name.Length, text.Length - element.Name.Length) : "";
+                string description = !string.IsNullOrEmpty(element.Description) ? text.Substring(title.Length, text.Length - title.Length) : "";
                 string backgroundColor = element.Active(element) ? APIConstants.DEFAULT_BACKGROUND_SELECTED_COLOR : APIConstants.INACTIVE_BACKGROUND_SELECTED_COLOR;
                 if (!(element is BaseCursorHierarchyElement hierarchyElement && hierarchyElement.Selected))
                 {

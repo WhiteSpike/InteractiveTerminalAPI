@@ -20,17 +20,17 @@ namespace InteractiveTerminalAPI.UI.Application
         }
         void IncrementSelectedCounter()
         {
-            RoundManager.PlayRandomClip(terminal.terminalAudio, terminal.keyboardClips);
+            PlayKeyboardSounds();
 			T selectedElement = currentCursorMenu.GetSelectedElement();
 			if (selectedElement is not CursorCounterElement) return;
-			currentCursorMenu.GetSelectedElement().IncrementCounter();
+			selectedElement.IncrementCounter();
         }
         void DecrementSelectedCounter()
-        {
-            RoundManager.PlayRandomClip(terminal.terminalAudio, terminal.keyboardClips);
-            T selectedElement = currentCursorMenu.GetSelectedElement();
+		{
+			PlayKeyboardSounds();
+			T selectedElement = currentCursorMenu.GetSelectedElement();
             if (selectedElement is not CursorCounterElement) return;
-            currentCursorMenu.GetSelectedElement().DecrementCounter();
+			selectedElement.DecrementCounter();
         }
         internal void OnApplicationCountUp(CallbackContext context)
         {
