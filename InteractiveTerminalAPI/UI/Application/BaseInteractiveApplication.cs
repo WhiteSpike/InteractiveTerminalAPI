@@ -51,7 +51,8 @@ namespace InteractiveTerminalAPI.UI.Application
         }
         internal void OnApplicationCursorUp(CallbackContext context)
         {
-            scrollingRoutine = InteractiveTerminalManager.Instance.StartCoroutine(RepeatScrolling(scrollUp: true));
+            if (scrollingRoutine != null) InteractiveTerminalManager.Instance.StopCoroutine(scrollingRoutine);
+			scrollingRoutine = InteractiveTerminalManager.Instance.StartCoroutine(RepeatScrolling(scrollUp: true));
         }
         internal void OnApplicationCursorScrollCancel(CallbackContext context)
 		{
@@ -62,7 +63,8 @@ namespace InteractiveTerminalAPI.UI.Application
             ChangeSorting();
         }
         internal void OnApplicationCursorDown(CallbackContext context)
-        {
+		{
+			if (scrollingRoutine != null) InteractiveTerminalManager.Instance.StopCoroutine(scrollingRoutine);
 			scrollingRoutine = InteractiveTerminalManager.Instance.StartCoroutine(RepeatScrolling(scrollUp: false));
 		}
         protected virtual void ChangeSorting()
