@@ -29,13 +29,15 @@ namespace InteractiveTerminalAPI.UI.Cursor
         }
 
         public void Forward()
-        {
-            cursorIndex = (cursorIndex + 1) % elements.Length;
-            while (!IsCurrentElementSelectable())
-            {
-                cursorIndex = (cursorIndex + 1) % elements.Length;
-            }
-        }
+		{
+			cursorIndex++;
+			if (cursorIndex >= elements.Length) cursorIndex = 0;
+			while (!IsCurrentElementSelectable())
+			{
+				cursorIndex++;
+				if (cursorIndex >= elements.Length) cursorIndex = 0;
+			}
+		}
 
         public void Backward()
         {
@@ -57,8 +59,6 @@ namespace InteractiveTerminalAPI.UI.Cursor
         public void ResetCursor()
         {
             cursorIndex = 0;
-			if (!IsCurrentElementSelectable())
-				Forward();
 		}
 
         public abstract string GetText(int availableLength);

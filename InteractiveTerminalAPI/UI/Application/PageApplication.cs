@@ -48,7 +48,7 @@ namespace InteractiveTerminalAPI.UI.Application
             if (currentPage.GetCurrentCursorMenu() == currentCursorMenu && currentCursorMenu.cursorIndex > cursorIndex)
             {
                 ChangeScreenBackward();
-                base.MoveCursorUp();
+                if (!currentCursorMenu.IsCurrentElementSelectable()) base.MoveCursorUp();
             }
         }
         public override void MoveCursorDown()
@@ -58,7 +58,7 @@ namespace InteractiveTerminalAPI.UI.Application
             if (currentPage.GetCurrentCursorMenu() == currentCursorMenu && currentCursorMenu.cursorIndex < cursorIndex)
             {
                 ChangeScreenForward();
-                base.MoveCursorDown();
+				if (!currentCursorMenu.IsCurrentElementSelectable()) base.MoveCursorDown();
             }
         }
         protected void ResetScreen()
@@ -96,7 +96,8 @@ namespace InteractiveTerminalAPI.UI.Application
 			PlayKeyboardSounds();
 			currentPage.PageDown();
             SwitchScreen(currentPage.GetCurrentScreen(), currentPage.GetCurrentCursorMenu(), false);
-        }
+			currentCursorMenu.cursorIndex = currentCursorMenu.elements.Length - 1;
+		}
         protected override void AddInputBindings()
         {
             base.AddInputBindings();
